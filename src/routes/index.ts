@@ -1,9 +1,10 @@
-const Router = require('express').Router
-const userRoutes = require('./user.routes')
-const todoRoutes = require('./todo.routes')
-const router = new Router()
+import { Router, Response } from 'express'
+import exampleRoutes from './example.routes'
+const router = Router()
 
-router.get('/healthCheck', (req, res) => res.status(200).send('All Good'))
-router.use('/users', userRoutes)
-router.use('/todos', todoRoutes)
+router.get('/healthCheck', (req: any, res: Response) =>
+  res.status(200).send('All Good'),
+)
+router.use('/example', exampleRoutes)
+
 module.exports = router

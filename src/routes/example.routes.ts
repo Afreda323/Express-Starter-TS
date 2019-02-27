@@ -1,14 +1,7 @@
-const Router = require('express').Router
-const controller = require('../controllers/user.controller')
-const expressJwt = require('express-jwt')
-const router = new Router()
+import { Router } from 'express'
+import exampleController from '../controllers/example.controller'
+const router = Router()
 
-router.post('/', controller.createUser)
-router.post('/login', controller.logInUser)
-router.get(
-  '/me',
-  expressJwt({ secret: process.env.JWT_SECRET }),
-  controller.getUser,
-)
+router.get('/', exampleController.getExample)
 
 module.exports = router
