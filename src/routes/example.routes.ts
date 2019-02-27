@@ -4,4 +4,4 @@ const router = Router()
 
 router.get('/', exampleController.getExample)
 
-module.exports = router
+export default router

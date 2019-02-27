@@ -7,4 +7,4 @@ router.get('/healthCheck', (req: any, res: Response) =>
 )
 router.use('/example', exampleRoutes)
 
-module.exports = router
+export default router
