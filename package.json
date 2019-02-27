@@ -4,14 +4,14 @@
   "description": "tstarter backend",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node build/index.js",
     "dev": "nodemon --exec babel-node src/index.ts --extensions \".ts,.tsx\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch",
     "build": "npm run build:types && npm run build:js",
     "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
+    "build:js": "babel src --out-dir build --extensions \".ts,.tsx\" --source-maps inline",
     "lint": "tslint -c tslint.json 'src/**/*.ts'"
   },
   "author": "",
