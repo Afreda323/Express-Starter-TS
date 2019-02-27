@@ -1,6 +1,6 @@
-const winston = require('winston')
+import winston from 'winston'
 
-const logger = winston.createLogger({
+const logger: winston.Logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
   transports: [
@@ -10,15 +10,17 @@ const logger = winston.createLogger({
 })
 
 if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple(),
-  }))
+  logger.add(
+    new winston.transports.Console({
+      format: winston.format.simple(),
+    }),
+  )
 }
 
-logger.stream = {
-  write (message) {
+export const stream = {
+  write(message: string) {
     logger.info(message)
   },
 }
 
-module.exports = logger
+export default logger
