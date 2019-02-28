@@ -1,4 +1,4 @@
-import { model, Schema, Document } from 'mongoose'
+import { model, Schema, Document, Model } from 'mongoose'
 import { isEmail } from 'validator'
 import bcrypt from 'bcrypt'
 
@@ -8,6 +8,11 @@ export interface IUser extends Document {
   createdAt: Date
   updatedAt: Date
 }
+
+interface IUserWithMethods extends IUser {
+  comparePassword: (password: string) => Promise<boolean>
+}
+
 const userSchema = new Schema(
   {
     email: {
@@ -15,11 +20,11 @@ const userSchema = new Schema(
       required: true,
       trim: true,
       validate: [isEmail, 'invalid email'],
+      unique: true,
     },
     password: {
       type: String,
       required: true,
-      select: false,
       validate: {
         validator: (p: string) => p.length >= 6,
         message: 'Password must be at least 6 characters long.',
@@ -29,14 +34,15 @@ const userSchema = new Schema(
   { timestamps: true },
 )
 
-userSchema.pre<IUser>('save', function(next) {
+userSchema.pre<IUserWithMethods>('save', function(next) {
   this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(10))
   next()
 })
+
 userSchema.methods.comparePassword = function(pw: string) {
   return bcrypt.compare(pw, this.password)
 }
 
-const user = model<IUser>('user', userSchema)
+const user: Model<IUserWithMethods> = model<IUserWithMethods>('user', userSchema)
 
 export default user
