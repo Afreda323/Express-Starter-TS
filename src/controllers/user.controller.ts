@@ -2,6 +2,12 @@ import { Request, Response, NextFunction } from 'express'
 import User from '../models/User'
 import logger from '../logger'
 
+/**
+ * Create a user and save to DB
+ * @param req
+ * @param res
+ * @param next
+ */
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body
   const user = new User({ email, password })
@@ -19,6 +25,13 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+/**
+ * Compare entered password to hashed,
+ * if its a match, generate a JWT and send it to the client
+ * @param req
+ * @param res
+ * @param next
+ */
 const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body
   try {
@@ -34,7 +47,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
 
     return res.json({ id: user._id, email: user.email })
   } catch (e) {
-    console.error(e)
+    logger.error(e)
     return next(e)
   }
 }

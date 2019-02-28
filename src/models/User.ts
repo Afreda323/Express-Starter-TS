@@ -2,7 +2,7 @@ import { model, Schema, Document, Model } from 'mongoose'
 import { isEmail } from 'validator'
 import bcrypt from 'bcrypt'
 
-export interface IUser extends Document {
+interface IUser extends Document {
   email: string
   password: string
   createdAt: Date
@@ -34,11 +34,13 @@ const userSchema = new Schema(
   { timestamps: true },
 )
 
+/** Hash password */
 userSchema.pre<IUserWithMethods>('save', function(next) {
   this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(10))
   next()
 })
 
+/** Compare entered pw to hashed pw */
 userSchema.methods.comparePassword = function(pw: string) {
   return bcrypt.compare(pw, this.password)
 }
