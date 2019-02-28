@@ -1,5 +1,5 @@
-import express from 'express'
-import mongoose, { mongo } from 'mongoose'
+import express, { NextFunction, Request, Response } from 'express'
+import mongoose from 'mongoose'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import helmet from 'helmet'
@@ -34,8 +34,17 @@ app.use(morgan('combined', { stream }))
 /** Router */
 app.use('/api', routes)
 
+/** Catch all errors */
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  if (err) {
+    return res.status(500).json(err)
+  }
+
+  return next()
+})
+
 /** 404 */
-app.use((_, res) => {
+app.use((_, res: Response) => {
   res.status(404).json({ error: 'Route does not exist' })
 })
 
